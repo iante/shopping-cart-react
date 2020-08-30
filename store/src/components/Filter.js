@@ -8,7 +8,7 @@ export default class Filter extends Component {
                 <div className="filter-sort">
                   
                     Order{" "}
-                    {/*this.props.sort comes from App.js, passing it as a prop */}
+                    {/*this.propss.sort comes from App.js, passing it as a prop */}
                      <select value={this.props.sort}
             onChange=
               {this.props.sortProducts}>

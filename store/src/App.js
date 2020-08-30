@@ -35,7 +35,7 @@ sort === "lowest"?
   };
 //method function
   filterProducts = (event) => {
-// if value selcte is empty, set the size and products to data.products
+// if value selcted is empty, set the size and products to data.products
     if(event.target.value === ""){
   this.setState({
     size: event.target.value
