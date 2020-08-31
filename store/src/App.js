@@ -10,20 +10,26 @@ class App extends React.Component //converting a functional component to a class
     super();
     this.state = { //setting initial state
       products: data.products,
-      cartItems: [],
+      //JSON.parse converts string to json set in localStorage
+      cartItems:localStorage.getItem("cartItems")? 
+      JSON.parse(localStorage.getItem("cartItems")): [],
       size: "",
       sort:"",
     };
   }
-
+createOrder = (order) => {
+  alert("Need to Save Order for" + order.name)
+}
   removeFromCart = (product) => {
-    const cartItems = this.state.cartItems.splice();
+    const cartItems = this.state.cartItems.slice();
     this.setState({
 //removes current product user selected to remove
-cartItems: cartItems.filter(x=>x._id !== product._id),
-    })
-    
-  }
+cartItems: cartItems.filter((x=>x._id !== product._id)),
+    });
+
+    localStorage.setItem("cartItems", JSON.stringify( cartItems.filter((x)=>x._id !== product._id))
+    );
+  };
 
   addToCart = (product) => {
 const cartItems = this.state.cartItems.slice();
@@ -41,7 +47,10 @@ if(!alreadyInCart){
   cartItems.push({...product, count: 1})
 }
 
-this.setState({cartItems})
+this.setState({cartItems});
+
+//saving the cart items when the page is refreshed
+localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
 
   sortProducts = (event) => {
@@ -98,7 +107,10 @@ sort === "lowest"?
             {/*passing this.state to Products component as a prop  */}
             <Products products={this.state.products} addToCart={this.addToCart}/>
           </div>
-          <div className="sidebar"> <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart}/></div>
+          <div className="sidebar">
+             <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart}
+             createOrder={this.createOrder}
+             /></div>
         </div>
         </main>
         <footer>
