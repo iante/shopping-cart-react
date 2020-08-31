@@ -2,6 +2,7 @@ import React from 'react';
 import data from './data.json'
 import Products from './components/Products';
 import Filter from './components/Filter';
+import Cart from './components/Cart';
 
 class App extends React.Component //converting a functional component to a class component 
 {
@@ -9,10 +10,39 @@ class App extends React.Component //converting a functional component to a class
     super();
     this.state = { //setting initial state
       products: data.products,
+      cartItems: [],
       size: "",
       sort:"",
     };
   }
+
+  removeFromCart = (product) => {
+    const cartItems = this.state.cartItems.splice();
+    this.setState({
+//removes current product user selected to remove
+cartItems: cartItems.filter(x=>x._id !== product._id),
+    })
+    
+  }
+
+  addToCart = (product) => {
+const cartItems = this.state.cartItems.slice();
+let alreadyInCart = false;
+
+//checks each item added in the cart and if item id is equal to product id, it increments the cart by 1
+cartItems.forEach(item => {
+  if(item._id === product._id){
+    item.count++;
+    alreadyInCart = true;
+  }
+});
+//if item wasnt already in cart, spread it and add it to the array
+if(!alreadyInCart){
+  cartItems.push({...product, count: 1})
+}
+
+this.setState({cartItems})
+  };
 
   sortProducts = (event) => {
 const sort = event.target.value;
@@ -66,9 +96,9 @@ sort === "lowest"?
             sortProducts={this.sortProducts}
             />
             {/*passing this.state to Products component as a prop  */}
-            <Products products={this.state.products}/>
+            <Products products={this.state.products} addToCart={this.addToCart}/>
           </div>
-          <div className="sidebar"> Cart Items</div>
+          <div className="sidebar"> <Cart cartItems={this.state.cartItems} removeFromCart={this.removeFromCart}/></div>
         </div>
         </main>
         <footer>
