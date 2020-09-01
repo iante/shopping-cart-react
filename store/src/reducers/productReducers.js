@@ -8,6 +8,7 @@ import {
     switch (action.type) {
       case FILTER_PRODUCTS_BY_SIZE:
         return {
+            //returns current state but the ...state adds item to current state without deleting current state(spreading)
           ...state,
           size: action.payload.size,
           filteredItems: action.payload.items,
