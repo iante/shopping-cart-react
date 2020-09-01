@@ -9,6 +9,10 @@ body,
   height: 100vh;
   margin: 0;
 }
+
+body::-webkit-scrollbar {
+  display: none;
+}
 body,
 input,
 select,
@@ -197,6 +201,10 @@ input {
   flex-wrap: wrap;
   justify-content: space-between;
   max-height: 96vh;
+}
+
+.product-details::-webkit-scrollbar {
+  display: none;
 }
 .product-details img {
   max-height: 100vh;

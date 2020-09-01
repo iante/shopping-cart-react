@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import formatCurrency from "../util";
+import Fade from 'react-reveal/Fade';
 export default class Cart extends Component {
   
   constructor(props){
@@ -44,6 +45,7 @@ export default class Cart extends Component {
 
 <div>
             <div className="cart">
+              <Fade left cascade>
                 <ul className="cart-items">
                 {cartItems.map((item) => (
                   <li key={item._id}>
@@ -64,6 +66,7 @@ export default class Cart extends Component {
                   </li>
                 ))}
                 </ul>
+                </Fade>
             </div>
 
             {/*Conditional rendering, we just want the total feature to be displayed if there is an item in the cart */}
@@ -90,6 +93,7 @@ export default class Cart extends Component {
       </div>
       {/* creating ShowCheckout Form*/}
  {this.state.showCheckout  && (
+   <Fade right cascade>
    <div className="cart">
    <form onSubmit={this.createOrder}>
                       <ul className="form-container">
@@ -128,6 +132,7 @@ export default class Cart extends Component {
                       </ul>
                     </form>
    </div>
+   </Fade>
  )}
 </div>
             )}
