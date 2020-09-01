@@ -47,6 +47,66 @@ app.get("/api/products", async (req, res) => {
     res.send(deletedProduct);
   });
 
+  //Creating a schema to store order details in mongoose db
+  const Order = mongoose.model(
+    "order",
+    new mongoose.Schema(
+      {
+        _id: {
+          type: String,
+          default: shortid.generate,
+        },
+        email: String,
+        name: String,
+        address: String,
+        total: Number,
+        cartItems: [
+          {
+            _id: String,
+            title: String,
+            price: Number,
+            count: Number,
+          },
+        ],
+      },
+      {
+        timestamps: true,
+      }
+    )
+  );
+
+  //Post API to insert items in the order DB
+  app.post("/api/orders", async (req, res) => {
+    if (
+        //checking if the paramters below exist
+      !req.body.name ||
+      !req.body.email ||
+      !req.body.address ||
+      !req.body.total ||
+      !req.body.cartItems
+    ) {
+      return res.send({ message: "Fill in all required fields." });
+    }
+
+    //saving the Order in DB
+    const order = await Order(req.body).save();
+    
+    //sending the order t DB
+    res.send(order);
+  });
+
+  //GET api to get orders from Order DB
+  app.get("/api/orders", async (req, res) => {
+    const orders = await Order.find({});
+    res.send(orders);
+  });
+
+  //DELETE API to delete orders from order DB
+  app.delete("/api/orders/:id", async (req, res) => {
+    const order = await Order.findByIdAndDelete(req.params.id);
+    res.send(order);
+  });
+
   //Listening to port and launching the server, process.env sets the port number automaticaly
   const port = process.env.PORT || 5000;
 app.listen(port, () => console.log("serve at http://localhost:5000"));
