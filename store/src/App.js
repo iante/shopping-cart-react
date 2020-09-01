@@ -1,47 +1,34 @@
-import React from 'react';
-import Products from './components/Products';
-import Filter from './components/Filter';
-import Cart from './components/Cart';
-import store from './store';
+import React from "react";
+import store from "./store";
 import { Provider } from "react-redux";
+import { BrowserRouter, Route, Link } from "react-router-dom";
+import HomeScreen from "./screens/HomeScreen";
+import AdminScreen from "./screens/AdminScreen";
 
-
-class App extends React.Component //converting a functional component to a class component 
-{
-  
-  render(){
+class App extends React.Component {
+  render() {
     return (
       <Provider store={store}>
-      <div className="grid-container">
-        <header>
-          <a href="/"><i>Stylez Shopping Cart</i></a>
-        </header>
-        <main>
-        <div className="content">
-          <div className="main">
-            {/*this.state.products.length displays the total number of products as a result */}
-            <Filter/>
-            {/*passing this.state to Products component as a prop  */}
-            <Products/>
+        <BrowserRouter>
+          <div className="grid-container">
+            <header>
+              <Link to="/">Stylez Shopping Cart</Link>
+              <Link to="/admin">Admin</Link>
+            </header>
+            <main>
+              <Route path="/admin" component={AdminScreen} />
+              <Route path="/" component={HomeScreen} exact />
+            </main>
+            <footer>All right is reserved.</footer>
           </div>
-          <div className="sidebar">
-             <Cart/>
-             </div>
-        </div>
-        </main>
-        <footer>
-          Created By Ian Murithi
-        </footer>
-      </div>
+        </BrowserRouter>
       </Provider>
-      );
-
+    );
   }
 }
-  
-
 
 export default App;
+
 
 //git remote add origin git@github.com:iante/react-shopping-cart.git
 //git push -u origin master
