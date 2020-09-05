@@ -3,14 +3,13 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const shortid = require("shortid");
 
+
 const app = express();
 app.use(bodyParser.json());
 
-app.use("/", express.static(__dirname + "/build"));
-app.get("/", (req, res) => res.sendFile(__dirname + "/build/index.html"));
 
 //initializing mongoose database
-mongoose.connect("mongodb://localhost/react-shopping-cart-db", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/react-shopping-cart-db", {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -109,6 +108,13 @@ app.get("/api/products", async (req, res) => {
     const order = await Order.findByIdAndDelete(req.params.id);
     res.send(order);
   });
+
+  //Checking if the app is already on heroku server
+  if(process.env.NODE_ENV === 'production'){
+    app.use("/", express.static(__dirname + "/build"));
+    app.get("/", (req, res) => res.sendFile(__dirname + "/build/index.html"));
+    
+  }
 
   //Listening to port and launching the server, process.env sets the port number automaticaly
   const port = process.env.PORT || 5000;
