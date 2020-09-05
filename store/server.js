@@ -2,6 +2,7 @@ const express = require("express"); //importing the modules
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const shortid = require("shortid");
+const path = require("path");
 
 
 const app = express();
@@ -111,8 +112,10 @@ app.get("/api/products", async (req, res) => {
 
   //Checking if the app is already on heroku server
   if(process.env.NODE_ENV === 'production'){
-    app.use("/", express.static(__dirname + "/build"));
-    app.get("/", (req, res) => res.sendFile(__dirname + "/build/index.html"));
+    app.use(express.static('build'));
+    app.get('*', (req,res) => {
+      res.sendFile(path.join(__dirname,'build','index.html'));
+    });
     
   }
 
